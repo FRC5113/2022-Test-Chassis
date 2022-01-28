@@ -123,11 +123,11 @@ public final class Constants {
 	public static final class LimeConstants {
 		//limelight constants
 		public static final double ANGLE = 51.09; //43.09
-		public static final double targetHeight = 48.75 + 27.75; // 27.75 is the trashcan
+		public static final double targetHeight = 69; //49.625 mediacenter table //48.75 + 27.75; // 27.75 is the trashcan
 		public static final double limelightHeight = 5.5;
-        public static final double kP = 0.015;
-        public static final double kI = 0.00015;
-        public static final double kD = 0.0005;
+        public static final double kP = 0.025; //0.015 works in cafeteria
+        public static final double kI = 0.00025; //0.00015 works in cafeteria
+        public static final double kD = 0.0005; //0.015 works in cafeteria
 		public static final double inchesToMeters = 0.0254;
 	}
 		
