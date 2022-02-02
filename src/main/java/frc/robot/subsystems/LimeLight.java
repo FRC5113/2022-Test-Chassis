@@ -1,8 +1,12 @@
 package frc.robot.subsystems;
 
+import edu.wpi.first.cscore.HttpCamera;
+import edu.wpi.first.cscore.MjpegServer;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import static frc.robot.Constants.LimeConstants.*;
@@ -13,6 +17,8 @@ public class LimeLight extends SubsystemBase {
     private NetworkTable table;
     private NetworkTableEntry tx, ty, ta, tv, ts;
     private double x, y, area, valid, skew;
+    private MjpegServer server;
+    private HttpCamera LLFeed;
 
     public LimeLight() {
         table = NetworkTableInstance.getDefault().getTable("limelight");
@@ -21,6 +27,16 @@ public class LimeLight extends SubsystemBase {
         ta = table.getEntry("ta");
         tv = table.getEntry("tv");
         ts = table.getEntry("ts");
+
+        ShuffleboardTab dashboardTab = Shuffleboard.getTab("Dash");
+        // TODO: Vlad: Getting camera in shufleboard
+        // LLFeed = new HttpCamera("limelight", "http://limelight.local:5800/stream.mjpg");
+        // cargoCam = CameraServer.getInstance().startAutomaticCapture(0);
+        // cargoCam.setConnectVerbose(0);
+        // server = CameraServer.getInstance().addSwitchedCamera("Toggle Cam");
+        // server.setSource(LLFeed);
+        // dashboardTab.add(server.getSource()).withWidget(BuiltInWidgets.kCameraStream).withPosition(1, 1).withSize(5, 4)
+        //     .withProperties(Map.of("Show Crosshair", true, "Show Controls", false));// specify widget properties here
     }
 
     public void update() {

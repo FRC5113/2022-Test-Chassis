@@ -110,12 +110,12 @@ public class RobotContainer {
         new DifferentialDriveVoltageConstraint(
             new SimpleMotorFeedforward(kSChassis, kVChassis, kAChassis),
             kDriveKinematics,
-            8);
+            1);
 
     // Create config for trajectory
     TrajectoryConfig config =
-        new TrajectoryConfig(0.5,
-                             0.1)
+        new TrajectoryConfig(kMaxSpeedMetersPerSecond,
+                             kMaxAccelerationMetersPerSecondSquared)
             // Add kinematics to ensure max speed is actually obeyed
             .setKinematics(kDriveKinematics)
             // Apply the voltage constraint
