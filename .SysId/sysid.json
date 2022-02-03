@@ -1,7 +1,7 @@
 {
   "SysId": {
     "Analysis Type": "Drivetrain",
-    "AnalyzerJSONLocation": "C:\\Test-Chassis-Characterization\\sysid_data20220201-164131.json",
+    "AnalyzerJSONLocation": "C:\\Test-Chassis-Characterization\\cafeteria.json",
     "NetworkTables Settings": {
       "serverTeam": "5113"
     },
