@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.motorcontrol.MotorController;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -124,15 +125,15 @@ public class DriveTrain extends SubsystemBase {
 
 
   public void resetOdometry(Pose2d pose) {
-    gyro.reset();
-    odometry.resetPosition(pose, new Rotation2d(gyro.getAngle()));
+    resetEncoders();
+    odometry.resetPosition(pose, gyro.getRotation2d());
   }
 
   public DifferentialDriveWheelSpeeds getWheelSpeeds() 
   {
     return (new DifferentialDriveWheelSpeeds(
-      leftMaster.getSelectedSensorVelocity() / 7.29 * 2 * Math.PI * Units.inchesToMeters(4), 
-      rightMaster.getSelectedSensorVelocity() / 7.29 * 2 * Math.PI * Units.inchesToMeters(4))); // change the wheel radius
+      leftMaster.getSelectedSensorVelocity() / 3.8 * Math.PI * Units.inchesToMeters(4), 
+      rightMaster.getSelectedSensorVelocity() / 3.8 * Math.PI * Units.inchesToMeters(4))); // change the wheel radius 7.29
   }
 
   public SimpleMotorFeedforward getFeedForward() {
@@ -167,9 +168,13 @@ public class DriveTrain extends SubsystemBase {
   }
 
   public void tankDriveVolts(double leftVolts, double rightVolts) {
+    
+    SmartDashboard.putNumber("Pose X", getPose().getX());
+    SmartDashboard.putNumber("Pose Y", getPose().getY());
     leftSide.setVoltage(leftVolts);
-    rightSide.setVoltage(-rightVolts);
+    rightSide.setVoltage(rightVolts);
     driveBase.feed();
+
   }
 
   public void setLeftSpeed() 

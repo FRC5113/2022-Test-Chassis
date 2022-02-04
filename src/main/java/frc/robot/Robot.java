@@ -16,6 +16,8 @@ import frc.robot.commands.TestCommand;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 
+import frc.robot.RobotContainer.*;
+
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -80,7 +82,6 @@ public class Robot extends TimedRobot {
   public void autonomousInit() 
   {
     CommandScheduler.getInstance().cancelAll();
-    m_robotContainer.driveTrain.resetOdometry(pos);
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
     if (m_autonomousCommand != null) {
       m_autonomousCommand.schedule();

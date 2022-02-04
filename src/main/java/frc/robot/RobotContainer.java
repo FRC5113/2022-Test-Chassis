@@ -8,9 +8,14 @@
 package frc.robot;
 
 import java.util.List;
+
+
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.RamseteController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
@@ -119,12 +124,12 @@ public class RobotContainer {
       // The Robot Characterization Toolsuite provides a convenient tool for obtaining
       // these
       // values for your robot.
-      public static final double ksVolts = 0.50207;
-      public static final double kvVoltSecondsPerMeter = 0.0097242;
-      public static final double kaVoltSecondsSquaredPerMeter = 0.00038467;
+      public static final double ksVolts = 0.53183; //0.52546;//0.50207
+      public static final double kvVoltSecondsPerMeter = 1.1203;//0.0097548;//0.0097242
+      public static final double kaVoltSecondsSquaredPerMeter = 0.044613; //0.00040311;//0.00038467
 
       // Example value only - as above, this must be tuned for your drive!
-      public static final double kPDriveVel = 0.014779;
+      public static final double kPDriveVel = 0.0017744;//1.1847E-07;//0.014779 - currently set to CANcode Kpvalue
       public static final double kTrackwidthMeters = 0.40132;
       // public static final DifferentialDriveKinematics kDriveKinematics = ;
       public static final double kMaxSpeedMetersPerSecond = 3;
@@ -184,7 +189,8 @@ public class RobotContainer {
 
     // Reset odometry to the starting pose of the trajectory.
     driveTrain.resetOdometry(exampleTrajectory.getInitialPose());
-
+    
+    
     // Run path following command, then stop at the end.
     return ramseteCommand.andThen(() -> driveTrain.tankDriveVolts(0, 0));
   }
