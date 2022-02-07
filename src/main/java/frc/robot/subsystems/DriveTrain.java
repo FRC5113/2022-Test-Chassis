@@ -92,6 +92,7 @@ public class DriveTrain extends SubsystemBase {
     rightMaster.configClosedloopRamp(5);
     leftMaster.configClosedloopRamp(5);
     
+    rightMaster.setInverted(true);
 
     gyro.reset();
 
@@ -126,14 +127,14 @@ public class DriveTrain extends SubsystemBase {
 
   public void resetOdometry(Pose2d pose) {
     resetEncoders();
-    odometry.resetPosition(pose, gyro.getRotation2d());
+    odometry.resetPosition(pose, Rotation2d.fromDegrees(-1* Math.IEEEremainder(gyro.getAngle(), 360)));
   }
 
   public DifferentialDriveWheelSpeeds getWheelSpeeds() 
   {
     return (new DifferentialDriveWheelSpeeds(
-      leftMaster.getSelectedSensorVelocity() / 3.8 * Math.PI * Units.inchesToMeters(4), 
-      rightMaster.getSelectedSensorVelocity() / 3.8 * Math.PI * Units.inchesToMeters(4))); // change the wheel radius 7.29
+      (leftMaster.getSelectedSensorVelocity() / (Math.PI * Units.inchesToMeters(4)))/8.25, /*8.25 is the gearbox ratio*/
+      (rightMaster.getSelectedSensorVelocity() / (Math.PI * Units.inchesToMeters(4)))/8.25)); // change the wheel radius 7.29
   }
 
   public SimpleMotorFeedforward getFeedForward() {
@@ -151,6 +152,11 @@ public class DriveTrain extends SubsystemBase {
   public double getTurnRate() {
     return gyro.getRate();
   }
+  public void resetGyro() {
+    gyro.reset();
+    //gyro.resetDisplacement();
+    //.zeroHeading();
+  }
 
   public void driveCartesian(double left, double right) {
     leftMaster.set(ControlMode.PercentOutput, left);
@@ -158,10 +164,10 @@ public class DriveTrain extends SubsystemBase {
 
     //SmartDashboard.putNumber("left", left);
     //SmartDashboard.putNumber("right", right);
-    SmartDashboard.putNumber("rightFront", rightMaster.getSupplyCurrent());
-    SmartDashboard.putNumber("leftFront", leftMaster.getSupplyCurrent());
-    SmartDashboard.putNumber("rightBack", rightSlave.getSupplyCurrent());
-    SmartDashboard.putNumber("leftBack", leftSlave.getSupplyCurrent());
+    //SmartDashboard.putNumber("rightFront", rightMaster.getSupplyCurrent());
+    //SmartDashboard.putNumber("leftFront", leftMaster.getSupplyCurrent());
+    //SmartDashboard.putNumber("rightBack", rightSlave.getSupplyCurrent());
+    //SmartDashboard.putNumber("leftBack", leftSlave.getSupplyCurrent());
 
     // SmartDashboard.putBoolean("beamBreakVal", beamBreakOut.get());
 
@@ -169,11 +175,20 @@ public class DriveTrain extends SubsystemBase {
 
   public void tankDriveVolts(double leftVolts, double rightVolts) {
     
-    SmartDashboard.putNumber("Pose X", getPose().getX());
-    SmartDashboard.putNumber("Pose Y", getPose().getY());
-    leftSide.setVoltage(leftVolts);
-    rightSide.setVoltage(rightVolts);
-    driveBase.feed();
+
+    SmartDashboard.putNumber("leftVolts", leftVolts);
+    SmartDashboard.putNumber("rightVolts", rightVolts);
+
+    leftMaster.set(ControlMode.Current, leftVolts);
+    rightMaster.set(ControlMode.Current, -rightVolts);
+    //driveBase.feed();
+
+  }
+
+  public void tankDriveVelocity(double leftVel, double rightVel) {
+    double leftMasterNativeVelocity = AutonConversionFactors.convertWPILIBTrajectoryUnitsToTalonSRXNavivel(leftVel, Units.inchesToMeters(4), false, 2048);
+
+
 
   }
 

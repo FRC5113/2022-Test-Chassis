@@ -124,16 +124,16 @@ public class RobotContainer {
       // The Robot Characterization Toolsuite provides a convenient tool for obtaining
       // these
       // values for your robot.
-      public static final double ksVolts = 0.53183; //0.52546;//0.50207
-      public static final double kvVoltSecondsPerMeter = 1.1203;//0.0097548;//0.0097242
-      public static final double kaVoltSecondsSquaredPerMeter = 0.044613; //0.00040311;//0.00038467
+      public static final double ksVolts = 0.51988; //0.52546;//0.50207
+      public static final double kvVoltSecondsPerMeter = 2.6973;//0.0097548;//0.0097242
+      public static final double kaVoltSecondsSquaredPerMeter = 0.11454; //0.00040311;//0.00038467
 
       // Example value only - as above, this must be tuned for your drive!
-      public static final double kPDriveVel = 0.0017744;//1.1847E-07;//0.014779 - currently set to CANcode Kpvalue
-      public static final double kTrackwidthMeters = 0.40132;
+      public static final double kPDriveVel = 2.8551;//2.8551//xdxdc1.1847E-07;//0.014779 - currently set to CANcode Kpvalue
+      public static final double kTrackwidthMeters = 0.45132;
       // public static final DifferentialDriveKinematics kDriveKinematics = ;
-      public static final double kMaxSpeedMetersPerSecond = 3;
-      public static final double kMaxAccelerationMetersPerSecondSquared = 3;
+      public static final double kMaxSpeedMetersPerSecond = 2; 
+      public static final double kMaxAccelerationMetersPerSecondSquared = 0.2;
       // Reasonable baseline values for a RAMSETE follower in units of meters and
       // seconds
       public static final double kRamseteB = 2;
@@ -149,7 +149,7 @@ public class RobotContainer {
             DriveConstants.kvVoltSecondsPerMeter,
             DriveConstants.kaVoltSecondsSquaredPerMeter),
         difDrive,
-        10);
+        12);
 
     // Create config for trajectory
     TrajectoryConfig config = new TrajectoryConfig(
@@ -165,7 +165,7 @@ public class RobotContainer {
         // Start at the origin facing the +X direction
         new Pose2d(0, 0, new Rotation2d(0)),
         // Pass through these two interior waypoints, making an 's' curve path
-        List.of(new Translation2d(1, 1), new Translation2d(2, -1)),
+        List.of(new Translation2d(1, 0), new Translation2d(2, 0)),
         // End 3 meters straight ahead of where we started, facing forward
         new Pose2d(3, 0, new Rotation2d(0)),
         // Pass config
@@ -189,6 +189,8 @@ public class RobotContainer {
 
     // Reset odometry to the starting pose of the trajectory.
     driveTrain.resetOdometry(exampleTrajectory.getInitialPose());
+    driveTrain.resetEncoders();
+    driveTrain.resetGyro();
     
     
     // Run path following command, then stop at the end.
