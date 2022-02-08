@@ -29,20 +29,14 @@ public final class Constants {
 		public static final int kBRChassis = 21;
 
 		//CHARACTERIZATION VALUES FOR CHASSIS
-		// Charactirization produces three values
-		// ks - Minimum voltage to move
-		// ka - Minimum voltage to go the same speed
-		// kv - Minimum voltage to accelerate 
-		public static final double kTrackWidth = 0.40132;// 0.4464852526536931 old TrackWidth
-		public static final double kSChassis = 0.53077;    //0.0741 old ks
-		public static final double kVChassis = 0.03263;// 2.87 old kv
-		public static final double kAChassis = 0.001424;// 0.289 old ka
-		public static final double kPDriveVel = 0.028686;//0.05 old Kp
+		public static final double kTrackWidth = 0.4464852526536931;
+		public static final double kSChassis = 0.0741;
+		public static final double kVChassis = 2.87;
+		public static final double kAChassis = 0.289;
+		public static final double kPDriveVel = 0.05;
 
 		//AUTON HELPERS
 		public static final DifferentialDriveKinematics kDriveKinematics = new DifferentialDriveKinematics(kTrackWidth);
-		public static final double kMaxSpeedMetersPerSecond = 1;
-		public static final double kMaxAccelerationMetersPerSecondSquared = 1;
 		public static final double kRamseteB = 2;
 		public static final double kRamseteZ = 0.7;
 
