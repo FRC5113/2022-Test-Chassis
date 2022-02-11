@@ -12,10 +12,12 @@ import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.kauailabs.navx.frc.AHRS;
+import com.kauailabs.navx.frc.Quaternion; 
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.SPI;
+//import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.motorcontrol.MotorController;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -69,7 +71,6 @@ public class DriveTrain extends SubsystemBase {
     leftSlave.configFactoryDefault();
     rightMaster.configFactoryDefault();
     rightSlave.configFactoryDefault();
-
     
     leftSlave.set(ControlMode.Follower, leftMaster.getDeviceID());
     rightSlave.set(ControlMode.Follower, rightMaster.getDeviceID());  
@@ -92,10 +93,12 @@ public class DriveTrain extends SubsystemBase {
     rightMaster.configClosedloopRamp(5);
     leftMaster.configClosedloopRamp(5);
     
-    rightMaster.setInverted(true);
 
-    gyro.reset();
 
+
+    //rightMaster.setInverted(true);
+    //gyro.reset();
+    //gyro.zeroYaw();
    // this.setMaxVoltage(0.5);
 
     
@@ -105,7 +108,8 @@ public class DriveTrain extends SubsystemBase {
 
     //pid.setSetpoint(setPoint);
     //leftMaster.set(ControlMode.Velocity, 2000);
-
+    resetEncoders();
+    odometry = new DifferentialDriveOdometry(gyro.getRotation2d());
   }
 
   public void resetEncoders() {
@@ -120,6 +124,10 @@ public class DriveTrain extends SubsystemBase {
     return Rotation2d.fromDegrees(-Math.IEEEremainder(gyro.getAngle(), 360));
   }
 
+  public double getGyroAngle() {
+    return gyro.getAngle();
+  }
+
   public Pose2d getPose() {
     return odometry.getPoseMeters();
   }
@@ -132,9 +140,12 @@ public class DriveTrain extends SubsystemBase {
 
   public DifferentialDriveWheelSpeeds getWheelSpeeds() 
   {
+    SmartDashboard.putNumber("Right Encoder", rightMaster.getSelectedSensorVelocity());
+    SmartDashboard.putNumber("RightWheelSpeed", rightMaster.getSelectedSensorVelocity()/(2048 * 8.25 * Math.PI * Units.inchesToMeters(4)));
     return (new DifferentialDriveWheelSpeeds(
-      (leftMaster.getSelectedSensorVelocity() / (Math.PI * Units.inchesToMeters(4)))/8.25, /*8.25 is the gearbox ratio*/
-      (rightMaster.getSelectedSensorVelocity() / (Math.PI * Units.inchesToMeters(4)))/8.25)); // change the wheel radius 7.29
+      (leftMaster.getSelectedSensorVelocity()/(2048 * 8.25 * Math.PI * Units.inchesToMeters(4))), //8.25 is gearbox ratio, 2048 is encoder units per rotation, 4 is the diameter of the wheel
+      (rightMaster.getSelectedSensorVelocity()/(2048 * 8.25 * Math.PI * Units.inchesToMeters(4)))
+    ));
   }
 
   public SimpleMotorFeedforward getFeedForward() {
@@ -150,15 +161,33 @@ public class DriveTrain extends SubsystemBase {
   }
 
   public double getTurnRate() {
+
     return gyro.getRate();
   }
   public void resetGyro() {
+    
     gyro.reset();
+    //gyro.zeroYaw();
     //gyro.resetDisplacement();
     //.zeroHeading();
   }
 
+  public void resetYaw() {
+    gyro.zeroYaw();
+  }
+  
   public void driveCartesian(double left, double right) {
+
+    //System.out.println("BBBBBBBBBBB " + gyro.isConnected() + " " + gyro.getAngle());
+    
+    SmartDashboard.putNumber("GyroValue", getGyroAngle());
+    if(gyro.isConnected()){
+      SmartDashboard.putNumber("isConnected", 1);
+    }
+    else{
+      SmartDashboard.putNumber("isConnected", 0);
+    }
+    
     leftMaster.set(ControlMode.PercentOutput, left);
     rightMaster.set(ControlMode.PercentOutput, -right);
 
@@ -178,19 +207,20 @@ public class DriveTrain extends SubsystemBase {
 
     SmartDashboard.putNumber("leftVolts", leftVolts);
     SmartDashboard.putNumber("rightVolts", rightVolts);
+    //System.out.println("AAAAAAAAAAAAA" + gyro.getAngle()+gyro.isConnected());
 
-    leftMaster.set(ControlMode.Current, leftVolts);
-    rightMaster.set(ControlMode.Current, -rightVolts);
-    //driveBase.feed();
-
-  }
-
-  public void tankDriveVelocity(double leftVel, double rightVel) {
-    double leftMasterNativeVelocity = AutonConversionFactors.convertWPILIBTrajectoryUnitsToTalonSRXNavivel(leftVel, Units.inchesToMeters(4), false, 2048);
-
-
+    leftSide.setVoltage(leftVolts);
+    rightSide.setVoltage(rightVolts);
+    driveBase.feed();
 
   }
+
+  //public void tankDriveVelocity(double leftVel, double rightVel) {
+    //double leftMasterNativeVelocity = AutonConversionFactors.convertWPILIBTrajectoryUnitsToTalonSRXNavivel(leftVel, Units.inchesToMeters(4), false, 2048);
+
+
+
+  //}
 
   public void setLeftSpeed() 
   {
@@ -217,7 +247,10 @@ public class DriveTrain extends SubsystemBase {
     //System.out.println(gyro.isCalibrating());
     //System.out.println("from here");
     //System.out.println(this.getHeading());
-    odometry.update(getHeading(), leftMaster.getSelectedSensorPosition(), rightMaster.getSelectedSensorPosition());
+    odometry.update(getHeading(), 
+      leftMaster.getSelectedSensorPosition()/(2048 * 8.25 * Math.PI * 4), 
+      rightMaster.getSelectedSensorPosition()/(2048 * 8.25 * Math.PI * 4));
+    //odometry.update(getHeading(), leftMaster.getSelectedSensorPosition(), rightMaster.getSelectedSensorPosition());
   }
 
 }

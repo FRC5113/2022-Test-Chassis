@@ -64,12 +64,14 @@ public class RobotContainer {
   public JoystickButton rightButtonTwo = new JoystickButton(controllerLeft, 2);
   public XboxController driveController = new XboxController(3);
 
+
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
     // Configure the button bindings
     configureButtonBindings();
+    //driveTrain.resetYaw();
   }
 
   public double getLeft() {
@@ -124,16 +126,16 @@ public class RobotContainer {
       // The Robot Characterization Toolsuite provides a convenient tool for obtaining
       // these
       // values for your robot.
-      public static final double ksVolts = 0.51988; //0.52546;//0.50207
+      public static final double ksVolts = 0.51115; //0.52546;//0.50207
       public static final double kvVoltSecondsPerMeter = 2.6973;//0.0097548;//0.0097242
-      public static final double kaVoltSecondsSquaredPerMeter = 0.11454; //0.00040311;//0.00038467
+      public static final double kaVoltSecondsSquaredPerMeter = 0.14832; //0.00040311;//0.00038467
 
       // Example value only - as above, this must be tuned for your drive!
       public static final double kPDriveVel = 2.8551;//2.8551//xdxdc1.1847E-07;//0.014779 - currently set to CANcode Kpvalue
       public static final double kTrackwidthMeters = 0.45132;
       // public static final DifferentialDriveKinematics kDriveKinematics = ;
       public static final double kMaxSpeedMetersPerSecond = 2; 
-      public static final double kMaxAccelerationMetersPerSecondSquared = 0.2;
+      public static final double kMaxAccelerationMetersPerSecondSquared = 2;
       // Reasonable baseline values for a RAMSETE follower in units of meters and
       // seconds
       public static final double kRamseteB = 2;
@@ -165,7 +167,7 @@ public class RobotContainer {
         // Start at the origin facing the +X direction
         new Pose2d(0, 0, new Rotation2d(0)),
         // Pass through these two interior waypoints, making an 's' curve path
-        List.of(new Translation2d(1, 0), new Translation2d(2, 0)),
+        List.of(new Translation2d(1, 1), new Translation2d(2, -1)),
         // End 3 meters straight ahead of where we started, facing forward
         new Pose2d(3, 0, new Rotation2d(0)),
         // Pass config
@@ -189,8 +191,8 @@ public class RobotContainer {
 
     // Reset odometry to the starting pose of the trajectory.
     driveTrain.resetOdometry(exampleTrajectory.getInitialPose());
-    driveTrain.resetEncoders();
-    driveTrain.resetGyro();
+    //driveTrain.resetEncoders();
+    //driveTrain.resetGyro();
     
     
     // Run path following command, then stop at the end.

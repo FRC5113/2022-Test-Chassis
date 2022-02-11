@@ -43,11 +43,12 @@ public class DriveCommand extends CommandBase {
   public void execute() {
     // System.out.println("L: " + leftVal.getAsDouble());
     // System.out.println("R: " + rightVal.getAsDouble() + "\n");
+    
     driveTrain.driveCartesian(leftVal.getAsDouble(), rightVal.getAsDouble());
-    SmartDashboard.putNumber("Odometry X" , driveTrain.getPose().getX());
-    SmartDashboard.putNumber("Odometry Y" , driveTrain.getPose().getY());
-    SmartDashboard.putNumber("Odometry distance", Math.sqrt(Math.pow(driveTrain.getPose().getX(), 2) + Math.pow(driveTrain.getPose().getY(), 2)));
-    SmartDashboard.putNumber("Odometry Angle", driveTrain.getHeading().getDegrees());
+    //SmartDashboard.putNumber("Odometry X" , driveTrain.getPose().getX());
+    //SmartDashboard.putNumber("Odometry Y" , driveTrain.getPose().getY());
+    //SmartDashboard.putNumber("Odometry distance", Math.sqrt(Math.pow(driveTrain.getPose().getX(), 2) + Math.pow(driveTrain.getPose().getY(), 2)));
+    //SmartDashboard.putNumber("Odometry Angle", driveTrain.getHeading().getDegrees());
     //SmartDashboard.putNumber("Distance to Target", limelight.getDistaceToTarget());
   }
 

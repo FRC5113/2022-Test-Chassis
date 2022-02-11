@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import frc.robot.commands.DriveCommand;
 import frc.robot.commands.TestCommand;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 
@@ -106,7 +107,9 @@ public class Robot extends TimedRobot {
     // continue until interrupted by another command, remove
     // this line or comment it out.  
     CommandScheduler.getInstance().cancelAll();
+    
     m_robotContainer = new RobotContainer();
+    m_robotContainer.driveTrain.resetGyro();
     m_robotContainer.driveTrain.setDefaultCommand(new DriveCommand(
                                                                   ()->(0.8*m_robotContainer.getLeft()), 
                                                                   ()->(0.8*m_robotContainer.getRight()), 
@@ -117,9 +120,7 @@ public class Robot extends TimedRobot {
    * This function is called periodically during operator control.
    */
   @Override
-  public void teleopPeriodic() 
-  {
-
+  public void teleopPeriodic() {
   }
 
   @Override
