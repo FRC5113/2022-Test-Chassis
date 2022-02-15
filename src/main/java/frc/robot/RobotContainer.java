@@ -126,9 +126,9 @@ public class RobotContainer {
       // The Robot Characterization Toolsuite provides a convenient tool for obtaining
       // these
       // values for your robot.
-      public static final double ksVolts = 0.51115; //0.52546;//0.50207
-      public static final double kvVoltSecondsPerMeter = 2.6973;//0.0097548;//0.0097242
-      public static final double kaVoltSecondsSquaredPerMeter = 0.14832; //0.00040311;//0.00038467
+      public static final double ksVolts = 0.50687; //0.52546;//0.50207
+      public static final double kvVoltSecondsPerMeter = 2.6901;//0.0097548;//0.0097242
+      public static final double kaVoltSecondsSquaredPerMeter = 0.12386; //0.00040311;//0.00038467
 
       // Example value only - as above, this must be tuned for your drive!
       public static final double kPDriveVel = 2.8551;//2.8551//xdxdc1.1847E-07;//0.014779 - currently set to CANcode Kpvalue
@@ -167,9 +167,9 @@ public class RobotContainer {
         // Start at the origin facing the +X direction
         new Pose2d(0, 0, new Rotation2d(0)),
         // Pass through these two interior waypoints, making an 's' curve path
-        List.of(new Translation2d(1, 1), new Translation2d(2, -1)),
+        List.of(new Translation2d(1, 1), new Translation2d(1, -2)),
         // End 3 meters straight ahead of where we started, facing forward
-        new Pose2d(3, 0, new Rotation2d(0)),
+        new Pose2d(1, 1, new Rotation2d(0)),
         // Pass config
         config);
 
