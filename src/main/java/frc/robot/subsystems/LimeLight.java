@@ -21,6 +21,16 @@ public class LimeLight extends SubsystemBase {
         ta = table.getEntry("ta");
         tv = table.getEntry("tv");
         ts = table.getEntry("ts");
+      
+        //ShuffleboardTab dashboardTab = Shuffleboard.getTab("Dash");
+        // TODO: Vlad: Getting camera in shufleboard
+        // LLFeed = new HttpCamera("limelight", "http://limelight.local:5800/stream.mjpg");
+        // cargoCam = CameraServer.getInstance().startAutomaticCapture(0);
+        // cargoCam.setConnectVerbose(0);
+        // server = CameraServer.getInstance().addSwitchedCamera("Toggle Cam");
+        // server.setSource(LLFeed);
+        // dashboardTab.add(server.getSource()).withWidget(BuiltInWidgets.kCameraStream).withPosition(1, 1).withSize(5, 4)
+        //     .withProperties(Map.of("Show Crosshair", true, "Show Controls", false));// specify widget properties here
     }
 
     public void update() {
@@ -29,11 +39,11 @@ public class LimeLight extends SubsystemBase {
         area = ta.getDouble(100.0);
         valid = tv.getDouble(100.0);
         skew = ts.getDouble(100.0);
-        SmartDashboard.putNumber("LimelightX", x);
-        SmartDashboard.putNumber("LimelightY", y);
-        SmartDashboard.putNumber("LimelightArea", area);
-        SmartDashboard.putNumber("LimelightValid", valid);
-        SmartDashboard.putNumber("LimelightSkew", skew);
+        //SmartDashboard.putNumber("LimelightX", x);
+        //SmartDashboard.putNumber("LimelightY", y)\;
+        //SmartDashboard.putNumber("LimelightArea", area);
+        //SmartDashboard.putNumber("LimelightValid", valid);
+        //SmartDashboard.putNumber("LimelightSkew", skew);
     }
 
     public double getTx() {
