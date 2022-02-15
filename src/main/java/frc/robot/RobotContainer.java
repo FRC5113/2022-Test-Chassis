@@ -126,6 +126,8 @@ public class RobotContainer {
       // The Robot Characterization Toolsuite provides a convenient tool for obtaining
       // these
       // values for your robot.
+
+
       public static final double ksVolts = 0.50687; //0.52546;//0.50207
       public static final double kvVoltSecondsPerMeter = 2.6901;//0.0097548;//0.0097242
       public static final double kaVoltSecondsSquaredPerMeter = 0.12386; //0.00040311;//0.00038467
@@ -169,7 +171,7 @@ public class RobotContainer {
         // Pass through these two interior waypoints, making an 's' curve path
         List.of(new Translation2d(1, 1), new Translation2d(1, -2)),
         // End 3 meters straight ahead of where we started, facing forward
-        new Pose2d(1, 1, new Rotation2d(0)),
+        new Pose2d(3, 0, new Rotation2d(0)),
         // Pass config
         config);
 

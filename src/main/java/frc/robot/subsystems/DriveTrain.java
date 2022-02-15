@@ -141,10 +141,10 @@ public class DriveTrain extends SubsystemBase {
   public DifferentialDriveWheelSpeeds getWheelSpeeds() 
   {
     SmartDashboard.putNumber("Right Encoder", rightMaster.getSelectedSensorVelocity());
-    SmartDashboard.putNumber("RightWheelSpeed", rightMaster.getSelectedSensorVelocity()/(2048 * 8.1 * Math.PI * Units.inchesToMeters(4)));
+    SmartDashboard.putNumber("RightWheelSpeed", rightMaster.getSelectedSensorVelocity()/(2048 * gearBoxRatio));
     return (new DifferentialDriveWheelSpeeds(
-      (leftMaster.getSelectedSensorVelocity()/(2048 * 8.1 * Math.PI * Units.inchesToMeters(4))), //8.1 is gearbox ratio, 2048 is encoder units per rotation, 4 is the diameter of the wheel
-      (rightMaster.getSelectedSensorVelocity()/(2048 * 8.1 * Math.PI * Units.inchesToMeters(4)))
+      ((leftMaster.getSelectedSensorVelocity() * Math.PI * Units.inchesToMeters(4))/(2048 * gearBoxRatio)), //8.1 is gearbox ratio, 2048 is encoder units per rotation, 4 is the diameter of the wheel
+      ((rightMaster.getSelectedSensorVelocity() * Math.PI * Units.inchesToMeters(4))/(2048 * gearBoxRatio))
     ));
   }
 
@@ -167,6 +167,7 @@ public class DriveTrain extends SubsystemBase {
   public void resetGyro() {
     
     gyro.reset();
+    gyro.setAngleAdjustment(90.0);
     //gyro.zeroYaw();
     //gyro.resetDisplacement();
     //.zeroHeading();
@@ -209,8 +210,8 @@ public class DriveTrain extends SubsystemBase {
     SmartDashboard.putNumber("rightVolts", rightVolts);
     //System.out.println("AAAAAAAAAAAAA" + gyro.getAngle()+gyro.isConnected());
 
-    leftSide.setVoltage(leftVolts);
-    rightSide.setVoltage(rightVolts);
+    leftSide.setVoltage(0.55*leftVolts);
+    rightSide.setVoltage(0.55*rightVolts);
     driveBase.feed();
 
   }
@@ -248,8 +249,8 @@ public class DriveTrain extends SubsystemBase {
     //System.out.println("from here");
     //System.out.println(this.getHeading());
     odometry.update(getHeading(), 
-      leftMaster.getSelectedSensorPosition()/(2048 * 8.25 * Math.PI * 4), 
-      rightMaster.getSelectedSensorPosition()/(2048 * 8.25 * Math.PI * 4));
+      (leftMaster.getSelectedSensorPosition()* Math.PI * Units.inchesToMeters(4))/(2048 * gearBoxRatio), 
+      (rightMaster.getSelectedSensorPosition()* Math.PI * Units.inchesToMeters(4))/(2048 * gearBoxRatio));
     //odometry.update(getHeading(), leftMaster.getSelectedSensorPosition(), rightMaster.getSelectedSensorPosition());
   }
 

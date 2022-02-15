@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 
+
 import frc.robot.RobotContainer.*;
 
 /**
@@ -85,6 +86,7 @@ public class Robot extends TimedRobot {
       m_autonomousCommand.schedule();
     }
     //m_robotContainer.driveTrain.setDefaultCommand(m_robotContainer.getAutonomousCommand());
+    m_robotContainer.driveTrain.resetGyro(); 
     m_robotContainer.driveTrain.setDefaultCommand(new TestCommand(m_robotContainer.driveTrain));
   }
 

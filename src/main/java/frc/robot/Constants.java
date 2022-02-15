@@ -35,6 +35,7 @@ public final class Constants {
 		public static final double kVChassis = 2.87;
 		public static final double kAChassis = 0.289;
 		public static final double kPDriveVel = 0.05;
+		public static final double gearBoxRatio = 8.1;
 
 		//AUTON HELPERS
 		public static final DifferentialDriveKinematics kDriveKinematics = new DifferentialDriveKinematics(kTrackWidth);
