@@ -141,10 +141,10 @@ public class DriveTrain extends SubsystemBase {
   public DifferentialDriveWheelSpeeds getWheelSpeeds() 
   {
     SmartDashboard.putNumber("Right Encoder", rightMaster.getSelectedSensorVelocity());
-    SmartDashboard.putNumber("RightWheelSpeed", rightMaster.getSelectedSensorVelocity()/(2048 * 8.25 * Math.PI * Units.inchesToMeters(4)));
+    SmartDashboard.putNumber("RightWheelSpeed", rightMaster.getSelectedSensorVelocity()/(2048 * 8.1 * Math.PI * Units.inchesToMeters(4)));
     return (new DifferentialDriveWheelSpeeds(
-      (leftMaster.getSelectedSensorVelocity()/(2048 * 8.25 * Math.PI * Units.inchesToMeters(4))), //8.25 is gearbox ratio, 2048 is encoder units per rotation, 4 is the diameter of the wheel
-      (rightMaster.getSelectedSensorVelocity()/(2048 * 8.25 * Math.PI * Units.inchesToMeters(4)))
+      (leftMaster.getSelectedSensorVelocity()/(2048 * 8.1 * Math.PI * Units.inchesToMeters(4))), //8.1 is gearbox ratio, 2048 is encoder units per rotation, 4 is the diameter of the wheel
+      (rightMaster.getSelectedSensorVelocity()/(2048 * 8.1 * Math.PI * Units.inchesToMeters(4)))
     ));
   }
 
