@@ -9,7 +9,7 @@ package frc.robot;
 
 import java.util.List;
 
-
+import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
@@ -30,6 +30,10 @@ import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstrai
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.math.trajectory.TrajectoryUtil;
+import java.io.IOException;
+import java.nio.file.Path;
+
 import frc.robot.commands.CenterTargetRobot;
 import frc.robot.commands.TestCommand;
 import frc.robot.commands.UpdateLimeCommand;
@@ -133,7 +137,7 @@ public class RobotContainer {
       public static final double kaVoltSecondsSquaredPerMeter = 0.12386; //0.00040311;//0.00038467
 
       // Example value only - as above, this must be tuned for your drive!
-      public static final double kPDriveVel = 2.8551;//2.8551//xdxdc1.1847E-07;//0.014779 - currently set to CANcode Kpvalue
+      public static final double kPDriveVel = 1.52739;//0.19968;//2.8551//xdxdc1.1847E-07;//0.014779 - currently set to CANcode Kpvalue
       public static final double kTrackwidthMeters = 0.45132;
       // public static final DifferentialDriveKinematics kDriveKinematics = ;
       public static final double kMaxSpeedMetersPerSecond = 2; 
@@ -165,18 +169,32 @@ public class RobotContainer {
             .addConstraint(autoVoltageConstraint);
 
     // An example trajectory to follow. All units in meters.
+
+
+    String trajectoryJSON = "paths/AutonTestPath.wpilib.json";
+  Trajectory trajectory = new Trajectory();
+
+  try {
+    System.out.println("MRORAK" + Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON).toString());
+    Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON);
+    trajectory = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
+ } catch (IOException ex) {
+    // DriverStation.reportError("Unable to open trajectory: " + trajectoryJSON, ex.getStackTrace());
+    System.out.println("No, it not work" + ex.getStackTrace());
+  }
+
     Trajectory exampleTrajectory = TrajectoryGenerator.generateTrajectory(
         // Start at the origin facing the +X direction
         new Pose2d(0, 0, new Rotation2d(0)),
         // Pass through these two interior waypoints, making an 's' curve path
-        List.of(new Translation2d(1, 1), new Translation2d(1, -2)),
+        List.of(new Translation2d(1, 1), new Translation2d(1, -2)), 
         // End 3 meters straight ahead of where we started, facing forward
         new Pose2d(3, 0, new Rotation2d(0)),
         // Pass config
         config);
 
     RamseteCommand ramseteCommand = new RamseteCommand(
-        exampleTrajectory,
+        trajectory,
         driveTrain::getPose,
         new RamseteController(DriveConstants.kRamseteB, DriveConstants.kRamseteZeta),
         new SimpleMotorFeedforward(
@@ -192,7 +210,7 @@ public class RobotContainer {
         driveTrain);
 
     // Reset odometry to the starting pose of the trajectory.
-    driveTrain.resetOdometry(exampleTrajectory.getInitialPose());
+    driveTrain.resetOdometry(trajectory.getInitialPose());
     //driveTrain.resetEncoders();
     //driveTrain.resetGyro();
     
