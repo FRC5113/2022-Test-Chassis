@@ -135,6 +135,7 @@ public class DriveTrain extends SubsystemBase {
 
   public void resetOdometry(Pose2d pose) {
     resetEncoders();
+    //odometry.resetPosition(pose, new Rotation2d(0.0));
     odometry.resetPosition(pose, Rotation2d.fromDegrees(-1* Math.IEEEremainder(gyro.getAngle(), 360)));
   }
 
@@ -167,8 +168,8 @@ public class DriveTrain extends SubsystemBase {
   public void resetGyro() {
     
     gyro.reset();
-    gyro.setAngleAdjustment(90.0);
-    //gyro.zeroYaw();
+    gyro.setAngleAdjustment(180);
+    gyro.zeroYaw();
     //gyro.resetDisplacement();
     //.zeroHeading();
   }

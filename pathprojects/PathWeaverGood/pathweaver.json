@@ -4,6 +4,6 @@
   "maxVelocity": 2.0,
   "maxAcceleration": 2.0,
   "trackWidth": 0.45132,
-  "gameName": "Infinite Recharge",
-  "outputDir": "../Pathweaver trajectories"
+  "gameName": "Rapid React",
+  "outputDir": "../../src/main/deploy/paths"
 }

@@ -132,12 +132,12 @@ public class RobotContainer {
       // values for your robot.
 
 
-      public static final double ksVolts = 0.50687; //0.52546;//0.50207
-      public static final double kvVoltSecondsPerMeter = 2.6901;//0.0097548;//0.0097242
-      public static final double kaVoltSecondsSquaredPerMeter = 0.12386; //0.00040311;//0.00038467
+      public static final double ksVolts = 0.53467;//0.50687; //0.52546;//0.50207
+      public static final double kvVoltSecondsPerMeter = 2.6842;//2.6901;//0.0097548;//0.0097242
+      public static final double kaVoltSecondsSquaredPerMeter =0.13339;// 0.12386; //0.00040311;//0.00038467
 
       // Example value only - as above, this must be tuned for your drive!
-      public static final double kPDriveVel = 1.52739;//0.19968;//2.8551//xdxdc1.1847E-07;//0.014779 - currently set to CANcode Kpvalue
+      public static final double kPDriveVel = 0.2089;//0.19968;//1.52739;//0.19968;//2.8551//xdxdc1.1847E-07;//0.014779 - currently set to CANcode Kpvalue
       public static final double kTrackwidthMeters = 0.45132;
       // public static final DifferentialDriveKinematics kDriveKinematics = ;
       public static final double kMaxSpeedMetersPerSecond = 2; 
@@ -171,7 +171,7 @@ public class RobotContainer {
     // An example trajectory to follow. All units in meters.
 
 
-    String trajectoryJSON = "paths/AutonTestPath.wpilib.json";
+    String trajectoryJSON = "paths/output/AutonTestPathRapidReact.wpilib.json";
   Trajectory trajectory = new Trajectory();
 
   try {
@@ -210,6 +210,7 @@ public class RobotContainer {
         driveTrain);
 
     // Reset odometry to the starting pose of the trajectory.
+    //Pose2d autoPose = new Pose2d(new Translation2d(0.235, 4.326), new Rotation2d(0.0));
     driveTrain.resetOdometry(trajectory.getInitialPose());
     //driveTrain.resetEncoders();
     //driveTrain.resetGyro();
