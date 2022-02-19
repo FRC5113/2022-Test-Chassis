@@ -43,7 +43,7 @@ public class DriveCommand extends CommandBase {
   public void execute() {
     // System.out.println("L: " + leftVal.getAsDouble());
     // System.out.println("R: " + rightVal.getAsDouble() + "\n");
-    
+    // System.out.println(leftVal.getAsDouble() + " - " + rightVal.getAsDouble());
     driveTrain.driveCartesian(leftVal.getAsDouble(), rightVal.getAsDouble());
     //SmartDashboard.putNumber("Odometry X" , driveTrain.getPose().getX());
     //SmartDashboard.putNumber("Odometry Y" , driveTrain.getPose().getY());

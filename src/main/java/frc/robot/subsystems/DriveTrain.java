@@ -32,6 +32,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import static frc.robot.Constants.ChassisConstants.*;
+import java.text.DecimalFormat;
+
 
 public class DriveTrain extends SubsystemBase {
   /**
@@ -129,7 +131,8 @@ public class DriveTrain extends SubsystemBase {
   }
 
   public Pose2d getPose() {
-    return odometry.getPoseMeters();
+    Pose2d pose = odometry.getPoseMeters();
+    return pose;
   }
 
 
@@ -141,8 +144,6 @@ public class DriveTrain extends SubsystemBase {
 
   public DifferentialDriveWheelSpeeds getWheelSpeeds() 
   {
-    SmartDashboard.putNumber("Right Encoder", rightMaster.getSelectedSensorVelocity());
-    SmartDashboard.putNumber("RightWheelSpeed", rightMaster.getSelectedSensorVelocity()/(2048 * gearBoxRatio));
     return (new DifferentialDriveWheelSpeeds(
       ((leftMaster.getSelectedSensorVelocity() * Math.PI * Units.inchesToMeters(4))/(2048 * gearBoxRatio)), //8.1 is gearbox ratio, 2048 is encoder units per rotation, 4 is the diameter of the wheel
       ((rightMaster.getSelectedSensorVelocity() * Math.PI * Units.inchesToMeters(4))/(2048 * gearBoxRatio))
@@ -178,18 +179,36 @@ public class DriveTrain extends SubsystemBase {
     gyro.zeroYaw();
   }
   
+  public void debugGyro() {
+    // puts all gyro values into smart dashbaord
+    double gyroValue = getGyroAngle();
+    double ptichValue = gyro.getPitch();
+    double yawValue = gyro.getYaw();
+    double rollValue = gyro.getRoll();
+    double velocityX = gyro.getVelocityX();
+    double velocityY = gyro.getVelocityY();
+    double velocityZ = gyro.getVelocityZ();
+
+    DecimalFormat df = new DecimalFormat("0.000");
+
+    String gyroValues = "GyroVal: " + df.format(gyroValue).toString() + 
+                        "\t PitchVal: " + df.format(ptichValue) + 
+                        "\t yawValue: " + df.format(yawValue) + 
+                        "\t RollVal: " + df.format(rollValue) +
+                        "\t VelocityX: " + df.format(velocityX) +
+                        "\t VelocityY: " + df.format(velocityY) +
+                        "\t velocityZ: " +df.format(velocityZ);
+    
+    SmartDashboard.putString("GyroValues", gyroValues);
+
+    SmartDashboard.putBoolean("isConnected", gyro.isConnected());
+  }
   public void driveCartesian(double left, double right) {
 
     //System.out.println("BBBBBBBBBBB " + gyro.isConnected() + " " + gyro.getAngle());
-    
-    SmartDashboard.putNumber("GyroValue", getGyroAngle());
-    if(gyro.isConnected()){
-      SmartDashboard.putNumber("isConnected", 1);
-    }
-    else{
-      SmartDashboard.putNumber("isConnected", 0);
-    }
-    
+   // SmartDashboard.putNumber("GyroValue", getGyroAngle());
+    //debugGyro(); 
+      
     leftMaster.set(ControlMode.PercentOutput, left);
     rightMaster.set(ControlMode.PercentOutput, -right);
 
@@ -207,12 +226,10 @@ public class DriveTrain extends SubsystemBase {
   public void tankDriveVolts(double leftVolts, double rightVolts) {
     
 
-    SmartDashboard.putNumber("leftVolts", leftVolts);
-    SmartDashboard.putNumber("rightVolts", rightVolts);
-    //System.out.println("AAAAAAAAAAAAA" + gyro.getAngle()+gyro.isConnected());
-
     leftSide.setVoltage(0.55*leftVolts);
     rightSide.setVoltage(0.55*rightVolts);
+    SmartDashboard.putNumber("leftVolts", leftVolts);
+    SmartDashboard.putNumber("rightVolts", rightVolts);
     driveBase.feed();
 
   }
@@ -223,16 +240,6 @@ public class DriveTrain extends SubsystemBase {
 
 
   //}
-
-  public void setLeftSpeed() 
-  {
-    leftMaster.set(ControlMode.Velocity, 10000);
-    SmartDashboard.putNumber("Velocity:", leftMaster.getSelectedSensorVelocity());
-    SmartDashboard.putNumber("Current:", leftMaster.getStatorCurrent());
-    //System.out.println(leftMaster.getSupplyCurrent());
-    
-  }
-
   
   public double getLeftRPM() 
   {
@@ -243,12 +250,21 @@ public class DriveTrain extends SubsystemBase {
     return rightMaster.getSelectedSensorVelocity();
   }
 
+  public void debugDriveTrain() {
+    SmartDashboard.putNumber("RightMasterEncoder", (rightMaster.getSelectedSensorPosition()));
+    SmartDashboard.putNumber("LeftMasterEncoder", (leftMaster.getSelectedSensorPosition()));
+    SmartDashboard.putNumber("LeftSlaveEncoder", (leftSlave.getSelectedSensorPosition()));
+    SmartDashboard.putNumber("RightSlaveEncoder", (rightSlave.getSelectedSensorPosition()));
+    SmartDashboard.putNumber("Leftdistance", (leftMaster.getSelectedSensorPosition()* Math.PI * Units.inchesToMeters(4))/(2048 * gearBoxRatio));
+    SmartDashboard.putNumber("RightDistance", (rightMaster.getSelectedSensorPosition()* Math.PI * Units.inchesToMeters(4))/(2048 * gearBoxRatio));
+    SmartDashboard.getString("currentPose", odometry.getPoseMeters().getX() + " - " + odometry.getPoseMeters().getY());
+
+  }
+
   @Override
   public void periodic() {
-    //System.out.println(gyro.isConnected());
-    //System.out.println(gyro.isCalibrating());
-    //System.out.println("from here");
-    //System.out.println(this.getHeading());
+
+    debugDriveTrain();
     odometry.update(getHeading(), 
       (leftMaster.getSelectedSensorPosition()* Math.PI * Units.inchesToMeters(4))/(2048 * gearBoxRatio), 
       (rightMaster.getSelectedSensorPosition()* Math.PI * Units.inchesToMeters(4))/(2048 * gearBoxRatio));
