@@ -169,7 +169,7 @@ public class DriveTrain extends SubsystemBase {
   public void resetGyro() {
     
     gyro.reset();
-    gyro.setAngleAdjustment(180);
+    gyro.setAngleAdjustment(90);
     gyro.zeroYaw();
     //gyro.resetDisplacement();
     //.zeroHeading();
