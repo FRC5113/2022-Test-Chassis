@@ -139,7 +139,8 @@ public class DriveTrain extends SubsystemBase {
   public void resetOdometry(Pose2d pose) {
     resetEncoders();
     //odometry.resetPosition(pose, new Rotation2d(0.0));
-    odometry.resetPosition(pose, Rotation2d.fromDegrees(-1* Math.IEEEremainder(gyro.getAngle(), 360)));
+    odometry.resetPosition(new Pose2d(0,0, Rotation2d.fromDegrees(-1* Math.IEEEremainder(gyro.getAngle(), 360))), Rotation2d.fromDegrees(-1* Math.IEEEremainder(gyro.getAngle(), 360)));
+    //odometry.resetPosition(pose, Rotation2d.fromDegrees(-1* Math.IEEEremainder(gyro.getAngle(), 360)));
   }
 
   public DifferentialDriveWheelSpeeds getWheelSpeeds() 
@@ -199,7 +200,7 @@ public class DriveTrain extends SubsystemBase {
                         "\t VelocityY: " + df.format(velocityY) +
                         "\t velocityZ: " +df.format(velocityZ);
     
-    SmartDashboard.putString("GyroValues", gyroValues);
+    //SmartDashboard.putString("GyroValues", gyroValues);
 
     SmartDashboard.putBoolean("isConnected", gyro.isConnected());
   }
@@ -226,8 +227,8 @@ public class DriveTrain extends SubsystemBase {
   public void tankDriveVolts(double leftVolts, double rightVolts) {
     
 
-    leftSide.setVoltage(0.55*leftVolts);
-    rightSide.setVoltage(0.55*rightVolts);
+    leftSide.setVoltage(leftVolts);
+    rightSide.setVoltage(rightVolts);
     SmartDashboard.putNumber("leftVolts", leftVolts);
     SmartDashboard.putNumber("rightVolts", rightVolts);
     driveBase.feed();
@@ -251,13 +252,14 @@ public class DriveTrain extends SubsystemBase {
   }
 
   public void debugDriveTrain() {
+
     SmartDashboard.putNumber("RightMasterEncoder", (rightMaster.getSelectedSensorPosition()));
     SmartDashboard.putNumber("LeftMasterEncoder", (leftMaster.getSelectedSensorPosition()));
     SmartDashboard.putNumber("LeftSlaveEncoder", (leftSlave.getSelectedSensorPosition()));
     SmartDashboard.putNumber("RightSlaveEncoder", (rightSlave.getSelectedSensorPosition()));
     SmartDashboard.putNumber("Leftdistance", (leftMaster.getSelectedSensorPosition()* Math.PI * Units.inchesToMeters(4))/(2048 * gearBoxRatio));
     SmartDashboard.putNumber("RightDistance", (rightMaster.getSelectedSensorPosition()* Math.PI * Units.inchesToMeters(4))/(2048 * gearBoxRatio));
-    SmartDashboard.getString("currentPose", odometry.getPoseMeters().getX() + " - " + odometry.getPoseMeters().getY());
+    
 
   }
 
@@ -266,9 +268,13 @@ public class DriveTrain extends SubsystemBase {
 
     debugDriveTrain();
     odometry.update(getHeading(), 
-      (leftMaster.getSelectedSensorPosition()* Math.PI * Units.inchesToMeters(4))/(2048 * gearBoxRatio), 
+      (
+        leftMaster.getSelectedSensorPosition()* Math.PI * Units.inchesToMeters(4))/(2048 * gearBoxRatio), 
       (rightMaster.getSelectedSensorPosition()* Math.PI * Units.inchesToMeters(4))/(2048 * gearBoxRatio));
-    //odometry.update(getHeading(), leftMaster.getSelectedSensorPosition(), rightMaster.getSelectedSensorPosition());
+      DecimalFormat df = new DecimalFormat("0.000");
+
+      SmartDashboard.putString("currentPose", df.format(odometry.getPoseMeters().getX()) + " - " + df.format(odometry.getPoseMeters().getY()));
+      //odometry.update(getHeading(), leftMaster.getSelectedSensorPosition(), rightMaster.getSelectedSensorPosition());
   }
 
 }

@@ -59,7 +59,7 @@ public final class Constants {
 		public static final double kaVoltSecondsSquaredPerMeter = 0.12073;//0.13339;// 0.12386; //0.00040311;//0.00038467
   
 		// Example value only - as above, this must be tuned for your drive!
-		public static final double kPDriveVel = 2.3549;//0.19624;//0.2089;//0.19968;//1.52739;//0.19968;//2.8551//xdxdc1.1847E-07;//0.014779 - currently set to CANcode Kpvalue
+		public static final double kPDriveVel =0.19624;//2.3549;//0.19624;//0.2089;//0.19968;//1.52739;//0.19968;//2.8551//xdxdc1.1847E-07;//0.014779 - currently set to CANcode Kpvalue
 		public static final double kTrackwidthMeters = 0.45132;
 		// public static final DifferentialDriveKinematics kDriveKinematics = ;
 		public static final double kMaxSpeedMetersPerSecond = 2; 

@@ -67,14 +67,13 @@ public class RobotContainer {
   public JoystickButton rightButtonTwo = new JoystickButton(controllerLeft, 2);
   public XboxController driveController = new XboxController(3);
 
-
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
     // Configure the button bindings
     configureButtonBindings();
-    //driveTrain.resetYaw();
+    // driveTrain.resetYaw();
   }
 
   public double getLeft() {
@@ -122,7 +121,7 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     DifferentialDriveKinematics difDrive = new DifferentialDriveKinematics(
-      DriveConstants.kTrackwidthMeters);
+        DriveConstants.kTrackwidthMeters);
 
     // Create a voltage constraint to ensure we don't accelerate too fast
     var autoVoltageConstraint = new DifferentialDriveVoltageConstraint(
@@ -144,27 +143,29 @@ public class RobotContainer {
 
     // An example trajectory to follow. All units in meters.
 
-
     String trajectoryJSON = "paths/output/AutonTestPathRapidReact.wpilib.json";
-  Trajectory trajectory = new Trajectory();
+    Trajectory trajectory = new Trajectory();
 
-  try {
-    System.out.println("MRORAK" + Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON).toString());
-    Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON);
-    trajectory = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
- } catch (IOException ex) {
-    // DriverStation.reportError("Unable to open trajectory: " + trajectoryJSON, ex.getStackTrace());
-    System.out.println("No, it not work" + ex.getStackTrace());
-  }
+    // try {
+    // System.out.println("Constacting " +
+    // Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON).toString());
+    // Path trajectoryPath =
+    // Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON);
+    // trajectory = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
+    // } catch (IOException ex) {
+    // // DriverStation.reportError("Unable to open trajectory: " + trajectoryJSON,
+    // ex.getStackTrace());
+    // System.out.println("No, it not work" + ex.getStackTrace());
+    // }
 
-    Trajectory exampleTrajectory = TrajectoryGenerator.generateTrajectory(
+    trajectory = TrajectoryGenerator.generateTrajectory(
         // Start at the origin facing the +X direction
         new Pose2d(0, 0, new Rotation2d(0)),
         // Pass through these two interior waypoints, making an 's' curve path
-        List.of(new Translation2d(1, 1), new Translation2d(1, -2)), 
+        List.of(new Translation2d(3, 0)),
         // End 3 meters straight ahead of where we started, facing forward
-        new Pose2d(3, 0, new Rotation2d(0)),
-        // Pass config
+        new Pose2d(3, 0, new Rotation2d(0.0)),
+        // Pass confi
         config);
 
     RamseteCommand ramseteCommand = new RamseteCommand(
@@ -184,12 +185,12 @@ public class RobotContainer {
         driveTrain);
 
     // Reset odometry to the starting pose of the trajectory.
-    //Pose2d autoPose = new Pose2d(new Translation2d(0.235, 4.326), new Rotation2d(0.0));
+    // Pose2d autoPose = new Pose2d(new Translation2d(0.235, 4.326), new
+    // Rotation2d(0.0));
     driveTrain.resetOdometry(trajectory.getInitialPose());
-    //driveTrain.resetEncoders();
-    //driveTrain.resetGyro();
-    
-    
+    // driveTrain.resetEncoders();
+    // driveTrain.resetGyro();
+
     // Run path following command, then stop at the end.
     return ramseteCommand.andThen(() -> driveTrain.tankDriveVolts(0, 0));
   }
