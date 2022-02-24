@@ -35,6 +35,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 
 import frc.robot.commands.CenterTargetRobot;
+import frc.robot.commands.DummyCommand;
 import frc.robot.commands.UpdateLimeCommand;
 import frc.robot.commands.SequentialTurretCommand;
 import frc.robot.commands.REsetOdometryCommand;
@@ -57,15 +58,19 @@ public class RobotContainer {
 
   public final DriveTrain driveTrain = new DriveTrain();
   public final LimeLight lime = new LimeLight();
-  public Joystick controllerLeft = new Joystick(2);
-  public Joystick controllerRight = new Joystick(0);
+  public Joystick controllerLeft = new Joystick(0);
+  public Joystick controllerRight = new Joystick(1);
   public JoystickButton leftTrigger = new JoystickButton(controllerLeft, 1);
   public JoystickButton rightTrigger = new JoystickButton(controllerRight, 1);
   public JoystickButton rightButton = new JoystickButton(controllerRight, 4);
   public JoystickButton leftButtonThree = new JoystickButton(controllerLeft, 3);
   public JoystickButton rightButtonThree = new JoystickButton(controllerRight, 3);
   public JoystickButton rightButtonTwo = new JoystickButton(controllerLeft, 2);
-  public XboxController driveController = new XboxController(3);
+  public XboxController xboxController = new XboxController(2);
+
+  // xbox button a
+  public JoystickButton aButton = new JoystickButton(xboxController, 1);
+  public JoystickButton bButton = new JoystickButton(xboxController, 2);
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -112,6 +117,9 @@ public class RobotContainer {
     // rightButtonThree.toggleWhenActive(new SequentialTurretCommand(driveTrain,
     // lime));
     rightButtonThree.toggleWhenActive(new REsetOdometryCommand(driveTrain, lime));
+    // joystick
+    aButton.toggleWhenActive(new DummyCommand());
+    bButton.toggleWhenActive(new DummyCommand());
   }
 
   /**
